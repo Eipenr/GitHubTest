@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <!-- 打印查询语句 -->
+        <setting name="logImpl" value="STDOUT_LOGGING"/>
+    </settings>
+    <!--    <typeAliases>-->
+    <!--        &lt;!&ndash;定义类的别名&ndash;&gt;-->
+    <!--        <typeAlias type="com.qianfeng.mybatis.pojo.Student" alias="stu" />-->
+
+    <!--        &lt;!&ndash;自动扫描包，将原类名作为别名&ndash;&gt;-->
+    <!--        <package name="com.qianfeng.mybatis.pojo" />-->
+    <!--    </typeAliases>-->
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <property name="url"
+                          value="jdbc:mysql:///mydb3?useUnicode=true&amp;characterEncoding=utf8&amp;useSSL=false"/>
+                <property name="username" value="root"/>
+                <property name="password" value="root"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <!--
+加载我们的 sql 语句的配置文件
+-->
+    <mappers>
+        <mapper resource="com/eipen/mybatis/mapper/UserMapper.xml"></mapper>
+    </mappers>
+
+
+</configuration>
