@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--
+namespace 要写当前 xml 要给哪个接口提供 sql 语句,写哪个接口的全限定名称
+一个 xml 文件只给一个接口文件提供 sql
+-->
+<mapper namespace="com.eipen.mybatis.mapper.UserMapper">
+    <!--
+    当前是给接口中哪个方法提供 sql 语句的  id 就是方法的名字
+
+    parameterType 参数类型, 接口中参数是什么类型这里就写什么类型
+    resultType 接口的方法返回什么,这里就写什么, 如果是一个类,就写全限定名称
+    #{} 占位符, 有防止 sql 注入的功能, 里面写的东西是参数的名字, 如果只有一个参数,并且参数是是基本数据类型或者是 String,则可以随便写,但是建议见其明知其义
+    -->
+    <select id="findUserById" parameterType="long" resultType="com.eipen.mybatis.pojo.User">
+        select * from user where uid=#{uid}
+    </select>
+    <select id="findUserByUsernameAndPassword" resultType="com.eipen.mybatis.pojo.User">
+        select * from user where username=#{arg0} and password=#{arg1}
+    </select>
+    <select id="findUserByUnameAndPwd" resultType="com.eipen.mybatis.pojo.User">
+        select * from user where username=#{uname} and password=#{pwd}
+    </select>
+    <select id="findUserByUnameAndPwdMap" resultType="com.eipen.mybatis.pojo.User">
+        select * from user where username=#{uname} and password=#{pwd}
+    </select>
+
+
+</mapper>
