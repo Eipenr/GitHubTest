@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qianfeng.ssm.mapper.UserMapper">
+    <!--
+
+    将一部分相同的 sql 语句抽取出来,然后使用的时候通过 include 导入即可,这样可以减少 sql 的编写量
+    -->
+    <sql id="wyfshiyigedsg">
+        select uid,
+               username,
+               password,
+               name,
+               email,
+               phone,
+               addr,
+               state,
+               code,
+               uuid
+        from user
+    </sql>
+
+
+    <select id="findUserById" resultType="com.qianfeng.ssm.pojo.User">
+        <include refid="wyfshiyigedsg"></include>
+        where uid = #{uid}
+    </select>
+
+
+    <select id="findUserBuNameAndPassword" resultType="com.qianfeng.ssm.pojo.User">
+        <include refid="wyfshiyigedsg"></include>
+        where username = #{username}
+        and password = #{password}
+    </select>
+
+    <!--
+    我们的参数有可能传递了有可能没有传递
+    我们期望,我们的条件如果都存在就是 and 关系,不然存在哪个用哪个
+    我们需要先知道参数存在还是不存在
+
+    if 条件判断, test 中判断的表达式 里面用到参数的值的时候直接写参数名就可以 不需要加#{}
+    如果要判断空字符串需要使用'',注意要不要判断空字符串取决于业务上的要求
+    -->
+    <select id="findUserByEmailAndPhone" resultType="com.qianfeng.ssm.pojo.User">
+
+        <include refid="wyfshiyigedsg"></include>
+        where
+        <if test="email !=null and email !=''">
+            email=#{email}
+        </if>
+
+        <if test="phonenum !=null and phonenum!=''">
+            and
+            phone =#{phonenum}
+        </if>
+    </select>
+
+    <!--
+    where标签会删除掉出现在 where 后的紧挨着的and或者是 or,这样我们所有的条件之前就都可以加 and 或者 or 了,wehre 标签会自动帮我们忽略
+    -->
+    <select id="findUserByEmailAndPhoneWhere" resultType="com.qianfeng.ssm.pojo.User">
+        <include refid="wyfshiyigedsg"></include>
+        <where>
+            <if test="email !=null and email !=''">
+                and email=#{email}
+            </if>
+
+            <if test="phonenum !=null and phonenum!=''">
+                and phone =#{phonenum}
+            </if>
+        </where>
+    </select>
+
+
+    <!--
+
+    下面的写法,除非最后一个条件传了值,否则当最后一个值不存在的时候,前面就出错,但是最后一个值可以不传
+    不传我们的 sql 中就会多一个, 就废了
+    -->
+    <update id="updateUserById">
+
+        update user set
+
+        <if test="password !=null and password!=''">
+            password =#{password},
+        </if>
+        <if test="name !=null and name!=''">
+            name =#{name},
+        </if>
+        <if test="email !=null and email!=''">
+            email =#{email},
+        </if>
+        <if test="phone !=null and phone!=''">
+            phone =#{phone},
+        </if>
+        <if test="addr !=null and addr!=''">
+            addr =#{addr}
+        </if>
+        where uid =#{uid}
+
+
+    </update>
+
+    <!--
+
+    set 标签会自动删除最后一个赋值后面的, 表面 sql 出错
+    -->
+    <update id="updateUserByIdwithSet">
+
+        update user
+        <set>
+            <if test="password !=null and password!=''">
+                password =#{password},
+            </if>
+            <if test="name !=null and name!=''">
+                name =#{name},
+            </if>
+            <if test="email !=null and email!=''">
+                email =#{email},
+            </if>
+            <if test="phone !=null and phone!=''">
+                phone =#{phone},
+            </if>
+            <if test="addr !=null and addr!=''">
+                addr =#{addr},
+            </if>
+        </set>
+        where uid =#{uid}
+    </update>
+<!--
+注意数字不能判断 ''
+-->
+    <update id="updateUserState">
+
+        update user
+        <set>
+            <if test="targetState!=null">
+                state =#{targetState}
+            </if>
+        </set>
+
+        <where>
+            <if test="username !=null and username !=''">
+                and username=#{username}
+            </if>
+            <if test="state !=null ">
+                and state=#{state}
+            </if>
+        </where>
+    </update>
+
+<!--
+select * from xxx where id in (1,5,8,11,19,20)
+foreach 遍历 collection要遍历的集合的参数名,我们在查询的时候会传递一个集合过来,这个集合的参数的名字就是它
+open 准备开始遍历的时候拼接什么
+index 代表遍历到第几个,一般用不到, 起个名字,在后面可以通过#{}来获取
+item 每次遍历之后会得到一个数据,这个数据通过 item 起一个名字,后面可以通过#{名字}获取到值
+separator 每遍历完成一个数据之后拼接什么
+close最后一个数据遍历后拼接什么
+标签中间的表达式就拼接的内容
+-->
+
+    <select id="findUsersByIdIn" resultType="com.qianfeng.ssm.pojo.User">
+
+        <include refid="wyfshiyigedsg"></include>
+        where uid in
+        <foreach collection="ids" open="("   item="id" separator=","  close=")">
+            #{id}
+        </foreach>
+
+    </select>
+</mapper>

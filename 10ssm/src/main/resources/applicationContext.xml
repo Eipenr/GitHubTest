@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+    <!--
+    加载property文件
+    classpath 指的是项目运行的时候 classes 目录,后面就可以写相对路径,相对于 classes 目录的
+    -->
+    <context:property-placeholder location="classpath:db.properties"/>
+
+    <context:component-scan base-package="com.qianfeng">
+<!--
+忽略的过滤器,可以忽略特定的类不扫描
+类型就是符合上面类型的数据不扫描,我们现在指定的是注解
+expression 注解的类型, 实际上就是最终类上面包含了指定类型的注解就不扫描
+-->
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+
+    </context:component-scan>
+
+    <!--
+    开启使用注解配置事务
+    -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <!--
+
+    配置数据库的连接,我们使用的是 druid 的连接池
+    -->
+<!--    <bean class="com.alibaba.druid.pool.DruidDataSource" id="dataSource">-->
+<!--        <property name="username" value="${jdbc.username}"/>-->
+<!--        <property name="password" value="${jdbc.password}"/>-->
+<!--        <property name="url" value="${jdbc.url}"/>-->
+<!--        <property name="driverClassName" value="${jdbc.driver}"/>-->
+<!--    </bean>-->
+
+
+<!--    &lt;!&ndash;-->
+<!--    有了连接,要创建 sqlsessionfactory, 是一个复杂对象,所以通过 factorybean 来创建-->
+<!--    &ndash;&gt;-->
+<!--    <bean class="org.mybatis.spring.SqlSessionFactoryBean" id="sqlSessionFactory">-->
+<!--        &lt;!&ndash;-->
+<!--        配置数据库连接-->
+<!--        &ndash;&gt;-->
+<!--        <property name="dataSource" ref="dataSource"/>-->
+<!--        &lt;!&ndash;-->
+<!--        如果你还要加载配置文件中的其他的配置,可以通过这个属性来注入-->
+<!--        &ndash;&gt;-->
+<!--        <property name="configLocation" value="classpath:mybatis.xml"/>-->
+<!--    </bean>-->
+
+
+<!--    &lt;!&ndash;-->
+<!--    我们的配置文件中还有一个 mappers 的标签进行注册 mapper 接口和 xml 文件的-->
+<!--    一定要注意 basepackage 能扫描到的包以及子包中只能有 mapper 的接口,不能有其他的接口,所以我们一般会直接指定 mapper 接口所在的包-->
+<!--    &ndash;&gt;-->
+<!--    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">-->
+<!--        <property name="basePackage" value="com.qianfeng.mybatis.dongtai.mapper"/>-->
+<!--    </bean>-->
+
+<!--    &lt;!&ndash;-->
+<!--    我们期望 spring 帮我们管理事务, 所以我们需要一个事务的管理器,不同的框架会有不同的管理器,我们的 mybatis 使用的是连接池类型的管理器-->
+<!--    &ndash;&gt;-->
+<!--    <bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager" id="transactionManager">-->
+<!--        &lt;!&ndash;-->
+<!--        需要配置连接池,注意这个连接池必须和 mybatis 使用的连接池为同一个连接池-->
+<!--        因为事务依赖于连接-->
+<!--        &ndash;&gt;-->
+<!--        <property name="dataSource" ref="dataSource"/>-->
+
+<!--    </bean>-->
+
+    <!--    &lt;!&ndash;-->
+    <!--    使用 spring 提供的一个管理事务的增强通知, 需要告诉它通过哪个事务管理器进行管理事务-->
+    <!--    &ndash;&gt;-->
+    <!--    <tx:advice id="tx_advice" transaction-manager="transactionManager">-->
+    <!--        &lt;!&ndash;-->
+    <!--        我们发现 当我们进行事务管理的时候 会有一些情况, 比如查询是不需要事务的,更新是需要事务的-->
+    <!--        &ndash;&gt;-->
+    <!--        <tx:attributes>-->
+    <!--            &lt;!&ndash;-->
+    <!--            method 是方法,什么方法呢? 通过下面的切入点表达式拦截到的方法是一个包含了很多个不同方法的集合-->
+    <!--            name 指的是具体拦截的某个方法的名字怎么配置,可以写通配符-->
+    <!--            比如我们约定 所有的查询操作都是 find 或者 get 开头-->
+    <!--            isolation 可以配置事务的隔离级别,如果需要配置就配置-->
+    <!--            read-only 只读 其实就是说无事务运行,不需要事务,那就意味后面不能进行更新操作-->
+    <!--            当然有人说我的查询操作不开事务,但是里面有更新操作,还需要事务,那怎么办? 一句话为什么要在查询中更新数据-->
+    <!--            timeout 超时时间,如果连接数据库执行操作超过一定时间没有结果就报错-->
+    <!--            no-rollback-for 我们的代码在某些异常的情况下不应该回滚事务,比如转账后发送短信异常不要回滚转账,所以这个时候转账出现的异常就不能回滚事务-->
+    <!--            在这里可以写几个需要回滚事务的异常的全限定名称, 多个以,分割-->
+    <!--            rollback-for 什么异常需要回滚事务,内容同上-->
+    <!--            问题出现了这两个该写谁? 哪个少写哪个,什么意思比如我只有少数几种情况下不回滚其他情况下全部回滚,那就写 no-roolback-for-->
+    <!--            同理,如果只有少数异常回滚,则配置 rollback-for-->
+    <!--            propagation 传播行为-->
+    <!--            &ndash;&gt;-->
+    <!--            <tx:method name="find*" read-only="true" propagation="SUPPORTS"/>-->
+    <!--            <tx:method name="get*" propagation="SUPPORTS" read-only="true"/>-->
+    <!--            <tx:method name="add*"/>-->
+    <!--            <tx:method name="insert*"/>-->
+    <!--            <tx:method name="update*" no-rollback-for="java.lang.ArithmeticException"/>-->
+    <!--            <tx:method name="delete*"/>-->
+    <!--        </tx:attributes>-->
+    <!--    </tx:advice>-->
+
+    <!--    &lt;!&ndash;-->
+    <!--    通过 aop 来连接我们的 service 开启和提交事务-->
+    <!--    &ndash;&gt;-->
+    <!--    <aop:config>-->
+    <!--        <aop:advisor advice-ref="tx_advice" pointcut="execution(* com.qianfeng.mybatis..service..*.*(..))"/>-->
+    <!--    </aop:config>-->
+
+</beans>
