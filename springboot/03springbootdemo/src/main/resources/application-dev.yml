@@ -1,0 +1,9 @@
+yonghu:
+  name: zhangsan
+  password: 123456
+
+ziji:
+  url: jdbc:mysql:///asdasdasd
+  password: dadasdas
+  username: root
+  driver: abcdefghi

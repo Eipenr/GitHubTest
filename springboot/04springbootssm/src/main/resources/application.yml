@@ -1,0 +1,7 @@
+spring:
+  datasource:
+    username: root
+    password: qishimeiyoumima
+    url: jdbc:mysql:///smartdevice?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimeZone=Asia/Shanghai
+    driver-class-name: org.gjt.mm.mysql.Driver
+    type: com.alibaba.druid.pool.DruidDataSource  #type来设置我们具体使用的连接池类型,这样子以后换的话只需要换类型就行了
