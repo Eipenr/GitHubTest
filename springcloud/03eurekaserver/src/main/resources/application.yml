@@ -1,0 +1,11 @@
+server:
+  port: 10000
+spring:
+  application:
+    name: eureka-server
+eureka:
+  client:
+    registerWithEureka: false #不注册到其他的 eureka
+    fetchRegistry: false #不从其他 eureka 同步数据
+    serviceUrl:
+      defaultZone: http://localhost:${server.port}/eureka/
