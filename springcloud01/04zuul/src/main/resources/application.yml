@@ -1,0 +1,18 @@
+server:
+  port: 30000
+spring:
+  application:
+    name: 04zuul
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:20000/eureka/
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+zuul:
+  routes:
+    03ORDERCLIENT: /test/**
+#  ignored-services: 02itemclient

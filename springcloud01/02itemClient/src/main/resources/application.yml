@@ -1,0 +1,9 @@
+server:
+  port: 10000
+spring:
+  application:
+    name: 02itemClient
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:20000/eureka/
