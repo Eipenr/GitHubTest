@@ -1,0 +1,10 @@
+server:
+  port: 10001
+spring:
+  rabbitmq:
+    host:
+    port:
+    username: guest
+    password: guest
+#yonghu:
+#  name: zhangsan

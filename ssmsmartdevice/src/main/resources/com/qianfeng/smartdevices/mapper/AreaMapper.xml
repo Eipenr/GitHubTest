@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qianfeng.smartdevices.mapper.AreaMapper">
+
+    <insert id="addArea">
+        INSERT INTO areas (areaname, parentid, status)
+        values (#{areaname}, #{parentid}, #{status})
+
+    </insert>
+    <update id="updateArea">
+        update areas
+        <set>
+            <if test="areaname!=null and areaname!=''">
+                areaname=#{areaname},
+            </if>
+            <if test="parentid!=null ">
+                parentid=#{parentid},
+            </if>
+            <if test="status!=null  and status!=-100">
+                status=#{status}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+    <delete id="deleteAreas">
+        update areas set status=0 where id in
+        <foreach collection="ids" open="(" close=")" item="id" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+
+    <select id="findParentAreaByStatus" resultType="com.qianfeng.smartdevices.pojo.Areas">
+
+        SELECT * FROM areas
+        WHERE parentid is null
+        <if test="status !=null">
+            and status =#{status}
+        </if>
+
+    </select>
+    <select id="findAllAreasByNameLikeAndStatusEquals" resultType="com.qianfeng.smartdevices.pojo.Areas">
+
+        SELECT zi.*, fu.areaname parentname FROM areas zi left JOIN areas fu on zi.parentid=fu.id
+        <where>
+            <if test="areaname !=null and areaname !=''">
+                zi.areaname like concat('%',#{areaname},'%')
+            </if>
+
+            <if test="status !=null and status !=-100 ">
+                and zi.status =#{status}
+            </if>
+            <if test="parentid !=null and parentid !=-100">
+                and zi.parentid=#{parentid}
+            </if>
+
+        </where>
+
+    </select>
+</mapper>

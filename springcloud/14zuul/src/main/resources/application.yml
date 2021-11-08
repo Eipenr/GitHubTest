@@ -1,0 +1,18 @@
+server:
+  port: 20000
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:11111/eureka/
+spring:
+  application:
+    name: 14zuul
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'  # 开启所有的监控地址
+#zuul:
+#  routes:
+#    13orderconsumer: /orders/**   # 要想访问 13orderconsumer 这个服务，需要使用 /orders/** 这个路径
+#  ignored-services: 13orderconsumer  # 添加忽略的服务列表

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--
+namespace 要写当前 xml 要给哪个接口提供 sql 语句,写哪个接口的全限定名称
+一个 xml 文件只给一个接口文件提供 sql
+-->
+<mapper namespace="com.qianfeng.smartdevices.mapper.RoleMenuMapper">
+    <insert id="addMenuToRole">
+        insert into role_menu (role_id, menu_id)
+        values (#{rid},#{mid});
+
+    </insert>
+
+    <delete id="deleteRoleMenu">
+        delete from role_menu (role_id,munu_id) values (#{rid},#{mid})
+    </delete>
+    <delete id="deleteAllMenusByRoleId">
+        delete from role_menu where role_id= #{rid}
+    </delete>
+
+
+    <select id="findMenuByRole" resultType="java.lang.Long">
+        select menu_id
+        from role_menu
+        where role_id = #{rid};
+    </select>
+</mapper>

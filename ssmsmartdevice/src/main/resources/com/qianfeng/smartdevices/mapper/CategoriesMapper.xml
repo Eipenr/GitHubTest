@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--
+namespace 要写当前 xml 要给哪个接口提供 sql 语句,写哪个接口的全限定名称
+一个 xml 文件只给一个接口文件提供 sql
+-->
+<mapper namespace="com.qianfeng.smartdevices.mapper.CategoriesMapper">
+
+
+    <insert id="addCategories">
+        INSERT INTO categories(categoryname, txcommand, rxcommand, commandname, status)
+        VALUES (#{categoryname}, #{txcommand}, #{rxcommand}, #{commandname}, #{status})
+    </insert>
+    <update id="updateCategory">
+        update categories
+        <set>
+            <if test="categoryname!=null">
+                categoryname=#{categoryname},
+            </if>
+            <if test="txcommand!=null">
+                txcommand=#{txcommand},
+            </if>
+            <if test="rxcommand!=null">
+                rxcommand=#{rxcommand},
+            </if>
+            <if test="commandname!=null">
+                commandname=#{commandname},
+            </if>
+            <if test="status==0||status==1">
+                status=#{status},
+            </if>
+
+
+        </set>
+        where id =#{id}
+    </update>
+    <delete id="deleteCategory">
+        update categories set status =0 where id in
+        <foreach collection="ids" open="("   item="ids" separator=","  close=")">
+            #{ids}
+        </foreach>
+    </delete>
+
+    <select id="findAllCategories" resultType="com.qianfeng.smartdevices.pojo.Categories">
+        SELECT * from categories
+        <where>
+            <if test="categoryname!=null and categoryname!=''">
+                and categoryname like concat('%',#{categoryname},'%')
+            </if>
+            <if test="status==0 || status==1">
+                and status=#{status}
+            </if>
+        </where>
+    </select>
+
+
+
+</mapper>

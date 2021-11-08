@@ -1,0 +1,15 @@
+server:
+  port: 10002
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:11111/eureka/
+spring:
+  application:
+    name: orders-v1
+
+
+# 这是其中一种负载均衡的设置方式， 在 配置文件值指定 哪个服务器 的负载均衡的 哪种策略
+#10ITEMPROVIDER-EUREKA:  # 给当前名字的服务设置负载均衡策略
+#  ribbon:
+#    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule

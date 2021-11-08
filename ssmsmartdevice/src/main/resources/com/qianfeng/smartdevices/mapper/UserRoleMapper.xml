@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--
+namespace 要写当前 xml 要给哪个接口提供 sql 语句,写哪个接口的全限定名称
+一个 xml 文件只给一个接口文件提供 sql
+-->
+<mapper namespace="com.qianfeng.smartdevices.mapper.UserRoleMapper">
+    <insert id="addRoleByUserId">
+        insert into user_role (user_id, role_id)
+        values (#{uid},#{rid});
+
+    </insert>
+
+    <select id="findRoleByUserId" resultType="java.lang.Long">
+        select role_id
+        from user_role
+        where user_id = #{uid};
+    </select>
+</mapper>

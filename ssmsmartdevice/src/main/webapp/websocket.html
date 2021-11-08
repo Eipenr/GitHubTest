@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript">
+        function lianjie() {
+            if ("WebSocket" in window) {
+                //alert("您的浏览器支持 WebSocket!");
+
+                // 打开一个 web socket
+                var value = document.getElementById("name").value;
+                 ws = new WebSocket("ws://"+location.host+"/websocket/" + value);
+
+                ws.onopen = function () {
+                    // Web Socket 已连接上，使用 send() 方法发送数据
+                    // ws.send("发送数据");
+                    //  alert("数据发送中...");
+                    fillData("建立连接成功")
+                };
+
+                ws.onmessage = function (evt) {
+                    var received_msg = evt.data;
+                    //alert("数据已接收...");
+                    fillData(received_msg)
+                };
+
+                ws.onclose = function () {
+                    // 关闭 websocket
+                    //alert("连接已关闭...");
+                    fillData("连接已关闭")
+                };
+            } else {
+                // 浏览器不支持 WebSocket
+                alert("您的浏览器不支持 WebSocket!");
+            }
+        }
+
+        function fillData(data) {
+            document.getElementById("content").innerHTML = data;
+        }
+
+        function  send(){
+            var msg = document.getElementById("msg").value;
+            var toUser = document.getElementById("toUser").value;
+            //拼接 json 字符串
+            var message= '{"toUser":"'+toUser+'","msg":"'+msg+'"}';
+            ws.send(message);
+        }
+
+        function huangemingzi() {
+            ws.close();
+        }
+    </script>
+</head>
+<body>
+
+姓名:<input id="name">
+<button onclick="lianjie()">连接</button>
+<br>
+<br>
+<br>
+<br>
+<br>
+对方的名字<input id="toUser"><br>
+内容<input id="msg"  >
+<br>
+</input><button onclick="send()">发送</button>
+<br>
+<br>
+<br>
+<br>
+<br>
+<span id="content"></span>
+<br>
+<br>
+<button onclick="huangemingzi()">关闭</button>
+</body>
+</html>

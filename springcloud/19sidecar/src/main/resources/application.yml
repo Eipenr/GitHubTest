@@ -1,0 +1,12 @@
+server:
+  port: 14785  # java 程序的端口
+spring:
+  application:
+    name: 19sidecar  # 程序名
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:11111/eureka/   # 注册中心的地址
+sidecar:
+  port: 8060  # 非 jvm 程序运行时的端口，因为本程序要和 非java 程序 在一个机器上，所以只需要端口即可
+  health-uri: http://localhost:8060/health.json #非 jvm程序用于检查服务状态的接口，返回 up 服务是可用的，返回 down 服务不可用

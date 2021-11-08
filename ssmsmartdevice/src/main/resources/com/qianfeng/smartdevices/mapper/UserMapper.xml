@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qianfeng.smartdevices.mapper.UserMapper">
+
+
+    <insert id="addUser">
+
+        INSERT
+        INTO users(username, password, `type`, data2, data1)
+        VALUES (#{username}, #{password}, #{type}, #{data2}, #{data1})
+
+    </insert>
+    <update id="deleteUserByIds">
+        update users set status = 0
+        where id in
+        <foreach collection="ids" open="(" separator="," close=")" item="id">
+            #{id}
+        </foreach>
+    </update>
+    <update id="updateUser">
+        update users
+        <set>
+            <if test="password!=null and password!=''">
+                password=#{password},
+            </if>
+            <if test="type!=null and type!=''">
+                type=#{type},
+            </if>
+            <if test="status!=null and status!=''">
+                status=#{status},
+            </if>
+            <if test="data2!=null and data2!=''">
+                data2=#{data2},
+            </if>
+            <if test="data1!=null and data1!=''">
+                data1=#{data1}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+
+    <select id="findAllUser" resultType="com.qianfeng.smartdevices.pojo.User">
+        select *
+        from users
+        <where>
+            <if test="username!=null and username!=''">
+                username like concat('%',#{username},'%')
+            </if>
+            <if test="status!=null and status!='' and status!='-100'">
+                and status=#{status}
+            </if>
+        </where>
+    </select>
+    <select id="findUserByName" resultType="com.qianfeng.smartdevices.pojo.User">
+        select * from users where username=#{username}
+    </select>
+</mapper>

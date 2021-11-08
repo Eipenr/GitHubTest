@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--
+namespace 要写当前 xml 要给哪个接口提供 sql 语句,写哪个接口的全限定名称
+一个 xml 文件只给一个接口文件提供 sql
+-->
+<mapper namespace="com.qianfeng.smartdevices.mapper.MenusMapper">
+
+
+    <insert id="addMenu">
+        insert into menu (name, parent_id, url, icon, perms, type, sort)
+        values (#{name}, #{parentId}, #{url}, #{icon}, #{perms}, #{type}, #{sort})
+
+    </insert>
+    <update id="updateMenu">
+        update menu
+        <set>
+            <if test="name!=null and name!=''">
+                name =#{name},
+            </if>
+            <if test="parentId!=null and parentId!=-100">
+                parentId =#{parentId},
+            </if>
+            <if test="url!=null and url!=''">
+                url =#{url},
+            </if>
+            <if test="icon!=null and icon!=''">
+                icon =#{icon},
+            </if>
+            <if test="perms!=null and perms!=''">
+                perms =#{perms},
+            </if>
+            <if test="type!=null and type!=-100">
+                type =#{type},
+            </if>
+            <if test="sort!=null and sort!=-100">
+                sort =#{sort},
+            </if>
+        </set>
+            where id=#{id}
+    </update>
+
+</mapper>
