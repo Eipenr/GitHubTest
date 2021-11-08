@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.qianfeng</groupId>
+    <groupId>org.example</groupId>
     <artifactId>springcloud</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
@@ -13,38 +13,41 @@
         <module>02orderconsumer</module>
         <module>03eurekaserver</module>
         <module>04itemprovider-eureka</module>
-        <module>05orderconsumereureka</module>
-        <module>06eurekaserver-cluster</module>
-        <module>07orderconsumereureka-ribbon</module>
-        <module>08orderconsumereureka-ribbon-custom</module>
-        <module>09orderconsumereureka-openfeign</module>
+        <module>06eurekaserver-jiqun</module>
         <module>10itemprovider-eureka</module>
-        <module>11orderconsumereureka-openfeign-ohter</module>
+        <module>11orderconsumer</module>
+        <module>12itemprovider-eureka</module>
+        <module>13orderconsumer</module>
+        <module>14zuul</module>
+        <module>15orderconsumer</module>
+        <module>17filterszuul</module>
+        <module>19sidecar</module>
+        <module>20configserver</module>
+        <module>21itemprovider-config</module>
     </modules>
 
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.9.RELEASE</version>
-    </parent>
-    
-    
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
-        <spring.cloud-version>Hoxton.SR12</spring.cloud-version>
-
     </properties>
-    
+
+    <parent>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <groupId>org.springframework.boot</groupId>
+        <version>2.3.9.RELEASE</version>
+    </parent>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring.cloud-version}</version>
+                <version>Hoxton.SR12</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+
 </project>
